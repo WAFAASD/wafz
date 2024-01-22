@@ -15,14 +15,12 @@ print("""\033[0;32m
 
 \033[0;37m""")
 def is_system_port(port):
-    # البورتات التي تقل عن 1024 عادة محجوزة للخدمات المعروفة
     return port < 1024
 
 def get_open_ports():
     return [conn.laddr.port for conn in psutil.net_connections()]
 
 def block_port(port):
-    # استخدم subprocess لتنفيذ أمر iptables لحجب البورت
     subprocess.run(['sudo', 'iptables', '-A', 'INPUT', '-p', 'tcp', '--dport', str(port), '-j', 'DROP'])
     current_time = os.popen('date +"%Y/%m/%d - %H:%M:%S"').read().strip()
     print(f"[!] \033[0;33mPort \033[0;37m[\033[0;36m{port}\033[0;37m]\033[0;37m has been \033[0;37m[\033[0;31mBlocked!\033[0;37m]"+ " - " + "[\033[0;33m" + current_time + "\033[0;37m]")
